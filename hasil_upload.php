@@ -37,21 +37,26 @@ $myArray = explode(" ", $teks); //proses tokenisasi
 
 
 $filteredarray = array_diff($myArray, $astoplist); //remove stopword
-$st = new IDNstemmer(); 
-$konek = mysqli_connect("localhost","root","","upload");
+$st = new IDNstemmer();
+$konek = mysqli_connect("localhost","root","","dbstbi");
+
+ 
+
 foreach($filteredarray as $filteredarray){
    // echo $filteredarray.'<br>';  
 //echo " ".
 if (strlen($filteredarray) >=4)
 	  {
-echo ">>".$filteredarray;
+//echo ">>".$filteredarray;
 $hasil=$st->doStemming($filteredarray);
+$hasil2= Enhanced_CS($filteredarray);
 //$st->doStemming($filteredarray)
-	   echo " ".$hasil.'<br>';
-	   $query = "INSERT INTO dokumen (nama_file, token, tokenstem)
-            VALUES('$nama_file','$filteredarray','$hasil')";
-            
-  mysqli_query($konek, $query);
+	 //  echo " ".$hasil.'<br>';
+ $query = "INSERT INTO dokumen (nama_file, token, tokenstem, tokenstem2)
+            VALUES('$nama_file', '$filteredarray', '$hasil', '$hasil2')";
+         echo ">>".$query;   
+  mysqli_query($konek, $query);	   
+	   
 	  }
 	  
 }
@@ -71,7 +76,7 @@ if (move_uploaded_file($lokasi_file,"$folder")){
   echo "Nama File : <b>$nama_file</b> sukses di upload";
   
   // Masukkan informasi file ke database
-  $konek = mysqli_connect("localhost","root","","upload");
+  $konek = mysqli_connect("localhost","root","","dbstbi");
 
   $query = "INSERT INTO upload (nama_file, deskripsi, tgl_upload)
             VALUES('$nama_file', '$_POST[deskripsi]', '$tgl_upload')";
@@ -89,7 +94,7 @@ if (move_uploaded_file($lokasi_file,"$folder")){
   echo "bisa";
   
 $tekspdf->decodePDF();
-echo $tekspdf->output(); 
+//echo $tekspdf->output(); 
  preproses($tekspdf->output(),$nama_file);
   
  // $pdf    = $parser->parseFile($lokasi_file."/folder/".'$nama_file');  

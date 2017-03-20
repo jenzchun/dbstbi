@@ -1,1 +1,2 @@
-# tugas1
+# stbi
+Tugas Information Retrieval
